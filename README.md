@@ -22,6 +22,8 @@
 tomi-asistente-agricola/
 ├── docs/                    # Documentación del proyecto
 ├── prototipo/               # Prototipos HTML/diseños
+├── complementos/            # Herramientas y utilidades adicionales
+│   └── conciliacion/        # Scripts de conciliación contable
 ├── modulos/
 │   ├── 01-conciliador/      # Módulo de conciliación (PRIORIDAD)
 │   ├── 02-cultivos/         # Gestión de cultivos
