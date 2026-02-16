@@ -1,4 +1,4 @@
-# 🍅 Tomi - Asistente Agrícola Inteligente
+# 🌾 San Ignacio - Asistente Agrícola Inteligente
 
 > Sistema integral para gestión de ranchos agrícolas: cultivos, clima, contabilidad, flotilla y más.
 
@@ -7,7 +7,7 @@
 
 ## 🎯 Visión del Proyecto
 
-**Tomi** es un asistente agrícola inteligente diseñado para optimizar la gestión de ranchos y empresas agrícolas. Integra múltiples módulos que trabajan juntos para proporcionar:
+**San Ignacio** es un asistente agrícola inteligente diseñado para optimizar la gestión de ranchos y empresas agrícolas. Integra múltiples módulos que trabajan juntos para proporcionar:
 
 - 📊 **Dashboard centralizado** con KPIs en tiempo real
 - 🌱 **Gestión de cultivos** con seguimiento de etapas
@@ -19,7 +19,7 @@
 ## 📂 Estructura del Proyecto
 
 ```
-tomi-asistente-agricola/
+san-ignacio-asistente-agricola/
 ├── docs/                    # Documentación del proyecto
 ├── prototipo/               # Prototipos HTML/diseños
 ├── modulos/
@@ -46,7 +46,7 @@ tomi-asistente-agricola/
 
 ### Fase 3: Inteligencia (Mes 3)
 - [ ] Integrar IA para análisis
-- [ ] Chat funcional con Tomi
+- [ ] Chat funcional con San Ignacio
 - [ ] Alertas automatizadas
 
 ## 🛠️ Tecnologías
