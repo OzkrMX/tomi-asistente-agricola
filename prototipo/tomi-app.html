@@ -607,6 +607,7 @@
         });
 
         // Chat button - mostrar mensaje de bienvenida
+        // TODO: Reemplazar alert() con modal dialog en versión de producción
         chatButton.addEventListener('click', () => {
             alert('¡Hola! Soy Tomi 🌱\n\nEsta es una versión de prototipo.\nEn la versión completa podrás:\n\n• Hacer preguntas sobre tus cultivos\n• Recibir alertas personalizadas\n• Consultar reportes financieros\n• Obtener recomendaciones de IA\n\n¿En qué puedo ayudarte hoy?');
         });
@@ -617,8 +618,8 @@
             // Aquí se conectarían las APIs reales
         }
 
-        // Actualizar cada 30 segundos
-        setInterval(updateMockData, 30000);
+        // Actualizar cada 30 segundos (almacenar ID para limpieza si es necesario)
+        const updateInterval = setInterval(updateMockData, 30000);
 
         // Log inicial
         console.log('🌱 Tomi Dashboard cargado correctamente');
