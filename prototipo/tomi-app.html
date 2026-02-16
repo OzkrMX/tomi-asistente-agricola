@@ -3,20 +3,628 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tomi App</title>
+    <title>Tomi - Asistente Agrícola</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fuente Inter para mejor legibilidad -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Configuración de Tailwind personalizada */
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+        
+        /* Colores personalizados para agricultura */
+        :root {
+            --color-primary-green: #10b981;
+            --color-secondary-green: #22c55e;
+            --color-warning-yellow: #f59e0b;
+            --color-danger-red: #ef4444;
+            --color-info-blue: #3b82f6;
+            --color-text-secondary: #6b7280;
+        }
+        
+        /* Alto contraste para uso exterior */
+        .high-contrast {
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Animaciones suaves */
+        .transition-smooth {
+            transition: all 0.3s ease;
+        }
+        
+        /* Botones táctiles grandes */
+        .btn-large {
+            min-height: 48px;
+            min-width: 48px;
+        }
+    </style>
 </head>
-<body>
-    <header>
-        <h1>Bienvenido a Tomi App</h1>
+<body class="bg-gray-50 min-h-screen">
+
+    <!-- ============================================
+         HEADER / NAVBAR
+         ============================================ -->
+    <header class="bg-white border-b-2 border-emerald-500 shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo y Título -->
+                <div class="flex items-center space-x-3">
+                    <!-- Icono Hamburger (móvil) -->
+                    <button id="menuToggle" class="lg:hidden btn-large p-2 rounded-lg hover:bg-gray-100 transition-smooth">
+                        <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                    
+                    <!-- Logo -->
+                    <div class="flex items-center space-x-2">
+                        <svg class="w-10 h-10 text-emerald-600" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+                            <path d="M12 2c-.55 0-1 .45-1 1v3c0 .55.45 1 1 1s1-.45 1-1V3c0-.55-.45-1-1-1zM6.76 4.84c-.39-.39-1.02-.39-1.41 0s-.39 1.02 0 1.41l2.12 2.12c.39.39 1.02.39 1.41 0s.39-1.02 0-1.41L6.76 4.84zM3 11c-.55 0-1 .45-1 1s.45 1 1 1h3c.55 0 1-.45 1-1s-.45-1-1-1H3z"/>
+                            <circle cx="12" cy="12" r="3" opacity="0.3"/>
+                        </svg>
+                        <div>
+                            <h1 class="text-xl lg:text-2xl font-bold text-gray-900 high-contrast">Tomi</h1>
+                            <p class="text-xs text-gray-600 hidden sm:block">Asistente Agrícola</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Indicador de Usuario -->
+                <div class="flex items-center space-x-2 lg:space-x-4">
+                    <!-- Usuario -->
+                    <div class="hidden md:flex items-center space-x-2 bg-gray-100 rounded-lg px-3 py-2">
+                        <svg class="w-6 h-6 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                        </svg>
+                        <span class="text-sm font-medium text-gray-700">Administrador</span>
+                    </div>
+                </div>
+            </div>
+        </nav>
     </header>
-    <main>
-        <section>
-            <h2>Prototipo de la Aplicación</h2>
-            <p>Este es un prototipo de la aplicación Tomi para asistencia agrícola.</p>
-        </section>
-    </main>
-    <footer>
-        <p>&copy; 2026 Tomi App</p>
+
+    <!-- ============================================
+         LAYOUT PRINCIPAL: SIDEBAR + CONTENIDO
+         ============================================ -->
+    <div class="flex">
+        
+        <!-- ============================================
+             SIDEBAR (colapsable en móvil)
+             ============================================ -->
+        <aside id="sidebar" class="fixed lg:static inset-y-0 left-0 transform -translate-x-full lg:translate-x-0 w-64 bg-white border-r border-gray-200 transition-smooth z-40 mt-16 lg:mt-0 overflow-y-auto">
+            <nav class="p-4 space-y-2">
+                <!-- Dashboard -->
+                <a href="#dashboard" class="flex items-center space-x-3 px-4 py-3 rounded-lg bg-emerald-50 text-emerald-700 font-medium btn-large hover:bg-emerald-100 transition-smooth">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                    </svg>
+                    <span class="text-base">Dashboard</span>
+                </a>
+                
+                <!-- Cultivos -->
+                <a href="#cultivos" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 font-medium btn-large hover:bg-gray-100 transition-smooth">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12,20A6,6 0 0,1 6,14C6,10 12,3.25 12,3.25C12,3.25 18,10 18,14A6,6 0 0,1 12,20Z"/>
+                    </svg>
+                    <span class="text-base">Cultivos</span>
+                </a>
+                
+                <!-- Clima -->
+                <a href="#clima" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 font-medium btn-large hover:bg-gray-100 transition-smooth">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm9 7h-6v13h-2v-6h-2v6H9V9H3V7h18v2z"/>
+                        <circle cx="12" cy="12" r="5" opacity="0.3"/>
+                    </svg>
+                    <span class="text-base">Clima</span>
+                </a>
+                
+                <!-- Conciliación -->
+                <a href="#conciliacion" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 font-medium btn-large hover:bg-gray-100 transition-smooth">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/>
+                    </svg>
+                    <span class="text-base">Conciliación</span>
+                </a>
+                
+                <!-- Flotilla -->
+                <a href="#flotilla" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 font-medium btn-large hover:bg-gray-100 transition-smooth">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
+                    </svg>
+                    <span class="text-base">Flotilla</span>
+                </a>
+                
+                <!-- Chat con IA -->
+                <a href="#chat" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 font-medium btn-large hover:bg-gray-100 transition-smooth">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/>
+                    </svg>
+                    <span class="text-base">Chat con IA</span>
+                </a>
+                
+                <!-- Configuración -->
+                <a href="#config" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 font-medium btn-large hover:bg-gray-100 transition-smooth">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
+                    </svg>
+                    <span class="text-base">Configuración</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Overlay para cerrar sidebar en móvil -->
+        <div id="sidebarOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden hidden"></div>
+
+        <!-- ============================================
+             CONTENIDO PRINCIPAL
+             ============================================ -->
+        <main class="flex-1 p-4 lg:p-8 max-w-7xl mx-auto w-full">
+            
+            <!-- Título del Dashboard -->
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-gray-900 high-contrast mb-2">Dashboard</h2>
+                <p class="text-base text-gray-600">Resumen de operaciones del rancho</p>
+            </div>
+
+            <!-- ============================================
+                 SECCIÓN KPIs (4 tarjetas)
+                 ============================================ -->
+            <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-8">
+                
+                <!-- KPI: Cultivos Activos -->
+                <div class="bg-white rounded-xl shadow-md hover:shadow-lg transition-smooth p-6 border-l-4 border-emerald-500">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="p-3 bg-emerald-100 rounded-lg">
+                            <svg class="w-8 h-8 text-emerald-600" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12,20A6,6 0 0,1 6,14C6,10 12,3.25 12,3.25C12,3.25 18,10 18,14A6,6 0 0,1 12,20Z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="text-gray-600 text-sm font-medium mb-1">Cultivos Activos</h3>
+                    <p class="text-3xl font-bold text-gray-900">12</p>
+                    <p class="text-xs text-emerald-600 mt-2">↑ 2 nuevos este mes</p>
+                </div>
+
+                <!-- KPI: Humedad Promedio -->
+                <div class="bg-white rounded-xl shadow-md hover:shadow-lg transition-smooth p-6 border-l-4 border-blue-500">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="p-3 bg-blue-100 rounded-lg">
+                            <svg class="w-8 h-8 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="text-gray-600 text-sm font-medium mb-1">Humedad Promedio</h3>
+                    <p class="text-3xl font-bold text-gray-900">68%</p>
+                    <p class="text-xs text-blue-600 mt-2">Nivel óptimo</p>
+                </div>
+
+                <!-- KPI: Vehículos en Operación -->
+                <div class="bg-white rounded-xl shadow-md hover:shadow-lg transition-smooth p-6 border-l-4 border-amber-500">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="p-3 bg-amber-100 rounded-lg">
+                            <svg class="w-8 h-8 text-amber-600" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="text-gray-600 text-sm font-medium mb-1">Vehículos</h3>
+                    <p class="text-3xl font-bold text-gray-900">8/10</p>
+                    <p class="text-xs text-amber-600 mt-2">2 en mantenimiento</p>
+                </div>
+
+                <!-- KPI: Balance Mensual -->
+                <div class="bg-white rounded-xl shadow-md hover:shadow-lg transition-smooth p-6 border-l-4 border-purple-500">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="p-3 bg-purple-100 rounded-lg">
+                            <svg class="w-8 h-8 text-purple-600" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="text-gray-600 text-sm font-medium mb-1">Balance Mensual</h3>
+                    <p class="text-3xl font-bold text-gray-900">$45,250</p>
+                    <p class="text-xs text-emerald-600 mt-2">↑ 12% vs mes anterior</p>
+                </div>
+            </section>
+
+            <!-- ============================================
+                 GRID: CLIMA + CONCILIACIÓN
+                 ============================================ -->
+            <section class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                
+                <!-- Widget de Clima -->
+                <div class="lg:col-span-2 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl shadow-lg p-6 text-white">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold">Clima Actual</h3>
+                        <svg class="w-12 h-12" fill="currentColor" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="5"/>
+                            <path d="M12 1v3m0 16v3M3.22 3.22l2.12 2.12m13.44 13.44l2.12 2.12M1 12h3m16 0h3M3.22 20.78l2.12-2.12M18.36 5.64l2.12-2.12"/>
+                        </svg>
+                    </div>
+                    
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <p class="text-6xl font-bold mb-2">28°C</p>
+                            <p class="text-xl">Soleado</p>
+                            <p class="text-sm opacity-90 mt-2">Última actualización: 14:30</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm mb-1">💧 Humedad: 65%</p>
+                            <p class="text-sm mb-1">💨 Viento: 12 km/h</p>
+                            <p class="text-sm">☔ Lluvia: 0%</p>
+                        </div>
+                    </div>
+
+                    <!-- Pronóstico 3 días -->
+                    <div class="border-t border-white border-opacity-30 pt-4">
+                        <h4 class="text-sm font-semibold mb-3">Pronóstico 3 días</h4>
+                        <div class="grid grid-cols-3 gap-4 text-center text-sm">
+                            <div>
+                                <p class="font-medium mb-1">Mañana</p>
+                                <p class="text-2xl mb-1">☀️</p>
+                                <p class="font-bold">29°C</p>
+                            </div>
+                            <div>
+                                <p class="font-medium mb-1">Miércoles</p>
+                                <p class="text-2xl mb-1">⛅</p>
+                                <p class="font-bold">26°C</p>
+                            </div>
+                            <div>
+                                <p class="font-medium mb-1">Jueves</p>
+                                <p class="text-2xl mb-1">🌧️</p>
+                                <p class="font-bold">24°C</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Alerta climática -->
+                    <div class="bg-yellow-400 bg-opacity-20 border border-yellow-300 rounded-lg p-3 mt-4">
+                        <p class="text-sm font-medium">⚠️ Alerta: Posible lluvia el jueves - Planificar riego</p>
+                    </div>
+                </div>
+
+                <!-- Acceso rápido a Conciliación -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="p-3 bg-purple-100 rounded-lg mr-3">
+                            <svg class="w-8 h-8 text-purple-600" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm-2 14l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-900">Conciliación</h3>
+                            <p class="text-sm text-gray-600">Estado financiero</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3 mb-6">
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                            <span class="text-sm text-gray-700">Pendientes</span>
+                            <span class="font-bold text-amber-600">8</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                            <span class="text-sm text-gray-700">Conciliadas</span>
+                            <span class="font-bold text-emerald-600">45</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                            <span class="text-sm text-gray-700">Total mes</span>
+                            <span class="font-bold text-gray-900">$128,450</span>
+                        </div>
+                    </div>
+
+                    <button class="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-4 rounded-lg btn-large transition-smooth shadow-md">
+                        Ir al Conciliador →
+                    </button>
+                </div>
+
+            </section>
+
+            <!-- ============================================
+                 ESTADO DE CULTIVOS
+                 ============================================ -->
+            <section class="bg-white rounded-xl shadow-lg p-6 mb-8">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-2xl font-bold text-gray-900">Estado de Cultivos</h3>
+                    <button class="text-emerald-600 hover:text-emerald-700 font-medium text-sm">Ver todos →</button>
+                </div>
+
+                <!-- Tabla de cultivos (responsive) -->
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="border-b-2 border-gray-200">
+                            <tr>
+                                <th class="pb-3 text-sm font-semibold text-gray-700">Cultivo</th>
+                                <th class="pb-3 text-sm font-semibold text-gray-700">Etapa</th>
+                                <th class="pb-3 text-sm font-semibold text-gray-700">Días Restantes</th>
+                                <th class="pb-3 text-sm font-semibold text-gray-700">Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            <tr class="hover:bg-gray-50 transition-smooth">
+                                <td class="py-4">
+                                    <div class="flex items-center">
+                                        <span class="text-2xl mr-3">🌽</span>
+                                        <div>
+                                            <p class="font-medium text-gray-900">Maíz</p>
+                                            <p class="text-xs text-gray-500">Parcela A-1</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="py-4 text-sm text-gray-700">Crecimiento</td>
+                                <td class="py-4 text-sm font-medium text-gray-900">45 días</td>
+                                <td class="py-4">
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
+                                        ● Excelente
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 transition-smooth">
+                                <td class="py-4">
+                                    <div class="flex items-center">
+                                        <span class="text-2xl mr-3">🍅</span>
+                                        <div>
+                                            <p class="font-medium text-gray-900">Tomate</p>
+                                            <p class="text-xs text-gray-500">Parcela B-2</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="py-4 text-sm text-gray-700">Floración</td>
+                                <td class="py-4 text-sm font-medium text-gray-900">30 días</td>
+                                <td class="py-4">
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
+                                        ● Excelente
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 transition-smooth">
+                                <td class="py-4">
+                                    <div class="flex items-center">
+                                        <span class="text-2xl mr-3">🥕</span>
+                                        <div>
+                                            <p class="font-medium text-gray-900">Zanahoria</p>
+                                            <p class="text-xs text-gray-500">Parcela C-1</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="py-4 text-sm text-gray-700">Desarrollo</td>
+                                <td class="py-4 text-sm font-medium text-gray-900">60 días</td>
+                                <td class="py-4">
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700">
+                                        ● Atención
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 transition-smooth">
+                                <td class="py-4">
+                                    <div class="flex items-center">
+                                        <span class="text-2xl mr-3">🥬</span>
+                                        <div>
+                                            <p class="font-medium text-gray-900">Lechuga</p>
+                                            <p class="text-xs text-gray-500">Parcela D-3</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="py-4 text-sm text-gray-700">Cosecha</td>
+                                <td class="py-4 text-sm font-medium text-gray-900">5 días</td>
+                                <td class="py-4">
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
+                                        ● Excelente
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ============================================
+                 RESUMEN DE FLOTILLA
+                 ============================================ -->
+            <section class="bg-white rounded-xl shadow-lg p-6 mb-8">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-2xl font-bold text-gray-900">Resumen de Flotilla</h3>
+                    <button class="text-amber-600 hover:text-amber-700 font-medium text-sm">Ver detalle →</button>
+                </div>
+
+                <!-- Grid de vehículos -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    
+                    <!-- Vehículo 1 -->
+                    <div class="border-2 border-gray-200 rounded-lg p-4 hover:border-emerald-500 transition-smooth">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-3xl">🚜</span>
+                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
+                                Operativo
+                            </span>
+                        </div>
+                        <h4 class="font-bold text-gray-900 mb-1">Tractor JD-01</h4>
+                        <p class="text-xs text-gray-600 mb-2">John Deere 6155R</p>
+                        <p class="text-xs text-gray-500">Próximo mantenimiento: 15 días</p>
+                    </div>
+
+                    <!-- Vehículo 2 -->
+                    <div class="border-2 border-gray-200 rounded-lg p-4 hover:border-amber-500 transition-smooth">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-3xl">🚛</span>
+                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-700">
+                                Mantenimiento
+                            </span>
+                        </div>
+                        <h4 class="font-bold text-gray-900 mb-1">Camión TR-03</h4>
+                        <p class="text-xs text-gray-600 mb-2">Ford F-350</p>
+                        <p class="text-xs text-gray-500">En taller desde: 2 días</p>
+                    </div>
+
+                    <!-- Vehículo 3 -->
+                    <div class="border-2 border-gray-200 rounded-lg p-4 hover:border-emerald-500 transition-smooth">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-3xl">🚜</span>
+                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
+                                Operativo
+                            </span>
+                        </div>
+                        <h4 class="font-bold text-gray-900 mb-1">Tractor NH-02</h4>
+                        <p class="text-xs text-gray-600 mb-2">New Holland T7.315</p>
+                        <p class="text-xs text-gray-500">Próximo mantenimiento: 8 días</p>
+                    </div>
+
+                    <!-- Vehículo 4 -->
+                    <div class="border-2 border-gray-200 rounded-lg p-4 hover:border-emerald-500 transition-smooth">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-3xl">🚐</span>
+                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
+                                Operativo
+                            </span>
+                        </div>
+                        <h4 class="font-bold text-gray-900 mb-1">Camioneta WT-05</h4>
+                        <p class="text-xs text-gray-600 mb-2">Toyota Hilux</p>
+                        <p class="text-xs text-gray-500">Próximo mantenimiento: 22 días</p>
+                    </div>
+
+                    <!-- Vehículo 5 -->
+                    <div class="border-2 border-gray-200 rounded-lg p-4 hover:border-red-500 transition-smooth">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-3xl">🚛</span>
+                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-700">
+                                Inactivo
+                            </span>
+                        </div>
+                        <h4 class="font-bold text-gray-900 mb-1">Remolque RM-01</h4>
+                        <p class="text-xs text-gray-600 mb-2">Remolque agrícola</p>
+                        <p class="text-xs text-gray-500">Requiere reparación mayor</p>
+                    </div>
+
+                    <!-- Vehículo 6 -->
+                    <div class="border-2 border-gray-200 rounded-lg p-4 hover:border-emerald-500 transition-smooth">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-3xl">🚜</span>
+                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
+                                Operativo
+                            </span>
+                        </div>
+                        <h4 class="font-bold text-gray-900 mb-1">Cosechadora CS-01</h4>
+                        <p class="text-xs text-gray-600 mb-2">Case IH 8240</p>
+                        <p class="text-xs text-gray-500">Próximo mantenimiento: 30 días</p>
+                    </div>
+
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- ============================================
+         CHAT WIDGET FLOTANTE
+         ============================================ -->
+    <button id="chatButton" class="fixed bottom-6 right-6 bg-emerald-600 hover:bg-emerald-700 text-white rounded-full w-16 h-16 shadow-2xl flex items-center justify-center btn-large transition-smooth z-50 hover:scale-110">
+        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/>
+            <path d="M7 9h10v2H7zm0-3h10v2H7z"/>
+        </svg>
+    </button>
+
+    <!-- ============================================
+         FOOTER
+         ============================================ -->
+    <footer class="bg-gray-900 text-gray-300 mt-12">
+        <div class="container mx-auto px-4 py-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Columna 1 -->
+                <div>
+                    <h4 class="text-white font-bold text-lg mb-4">Tomi Agrícola</h4>
+                    <p class="text-sm mb-4">Sistema integral de gestión para ranchos y empresas agrícolas.</p>
+                    <p class="text-xs text-gray-400">Versión 0.1.0 (Prototipo)</p>
+                </div>
+
+                <!-- Columna 2 -->
+                <div>
+                    <h4 class="text-white font-bold text-lg mb-4">Enlaces Rápidos</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-emerald-400 transition-smooth">Documentación</a></li>
+                        <li><a href="#" class="hover:text-emerald-400 transition-smooth">Soporte Técnico</a></li>
+                        <li><a href="#" class="hover:text-emerald-400 transition-smooth">Tutoriales</a></li>
+                        <li><a href="#" class="hover:text-emerald-400 transition-smooth">API Documentation</a></li>
+                    </ul>
+                </div>
+
+                <!-- Columna 3 -->
+                <div>
+                    <h4 class="text-white font-bold text-lg mb-4">Contacto</h4>
+                    <p class="text-sm mb-2">📧 contacto@tomi-agricola.com</p>
+                    <p class="text-sm mb-2">📞 +52 (555) 123-4567</p>
+                    <p class="text-sm">📍 Ciudad de México, México</p>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="border-t border-gray-800 mt-8 pt-6 text-center">
+                <p class="text-sm">&copy; 2026 Tomi - Asistente Agrícola. Todos los derechos reservados.</p>
+                <p class="text-xs text-gray-500 mt-2">Desarrollado por <a href="https://github.com/OzkrMX" class="text-emerald-400 hover:text-emerald-300">@OzkrMX</a></p>
+            </div>
+        </div>
     </footer>
+
+    <!-- ============================================
+         JAVASCRIPT PARA INTERACTIVIDAD
+         ============================================ -->
+    <script>
+        // Variables del DOM
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const chatButton = document.getElementById('chatButton');
+
+        // Toggle del menú lateral en móvil
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('-translate-x-full');
+            sidebarOverlay.classList.toggle('hidden');
+        });
+
+        // Cerrar sidebar al hacer clic en el overlay
+        sidebarOverlay.addEventListener('click', () => {
+            sidebar.classList.add('-translate-x-full');
+            sidebarOverlay.classList.add('hidden');
+        });
+
+        // Cerrar sidebar al hacer clic en un enlace (en móvil)
+        const sidebarLinks = sidebar.querySelectorAll('a');
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth < 1024) {
+                    sidebar.classList.add('-translate-x-full');
+                    sidebarOverlay.classList.add('hidden');
+                }
+            });
+        });
+
+        // Chat button - mostrar mensaje de bienvenida
+        chatButton.addEventListener('click', () => {
+            alert('¡Hola! Soy Tomi 🌱\n\nEsta es una versión de prototipo.\nEn la versión completa podrás:\n\n• Hacer preguntas sobre tus cultivos\n• Recibir alertas personalizadas\n• Consultar reportes financieros\n• Obtener recomendaciones de IA\n\n¿En qué puedo ayudarte hoy?');
+        });
+
+        // Simular actualización de datos cada 30 segundos (en producción vendría de API)
+        function updateMockData() {
+            console.log('Actualizando datos del dashboard...');
+            // Aquí se conectarían las APIs reales
+        }
+
+        // Actualizar cada 30 segundos
+        setInterval(updateMockData, 30000);
+
+        // Log inicial
+        console.log('🌱 Tomi Dashboard cargado correctamente');
+        console.log('📊 Versión: 0.1.0 (Prototipo)');
+        console.log('👨‍💻 Desarrollado por @OzkrMX');
+    </script>
+
 </body>
 </html>
